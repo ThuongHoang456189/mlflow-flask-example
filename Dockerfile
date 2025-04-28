@@ -6,5 +6,7 @@ COPY app.py .
 COPY templates/ templates/
 COPY classifier.py .
 RUN python classifier.py
-EXPOSE 8001
-CMD ["gunicorn", "--bind", "0.0.0.0:8001", "app:app"]
+COPY start.sh .
+RUN chmod +x start.sh
+EXPOSE 8001 5000
+CMD ["./start.sh"]
