@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification Predictor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .form-group { margin-bottom: 10px; }
+        .error { color: red; }
+        .result { color: green; font-weight: bold; }
+        input { width: 100px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Classification Predictor</h1>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if prediction is not none %}
+            <p class="result">Prediction: {{ prediction }}</p>
+        {% endif %}
+        <form method="POST">
+            <div class="form-group">
+                {% for i in range(20) %}
+                    <input type="number" step="any" name="feature_{{ i }}" 
+                           placeholder="Feature {{ i+1 }}"
+                           value="{{ features[i] if features else '' }}"
+                           required>
+                    {% if i % 5 == 4 %}<br>{% endif %}
+                {% endfor %}
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</body>
+</html>
