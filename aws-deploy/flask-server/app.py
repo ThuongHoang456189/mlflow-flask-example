@@ -1,5 +1,6 @@
 import mlflow
 import mlflow.sklearn
+from mlflow.tracking import MlflowClient
 from flask import Flask, request, render_template, jsonify
 import numpy as np
 import os
@@ -7,19 +8,37 @@ import traceback
 
 app = Flask(__name__)
 
-# Set the tracking URI explicitly
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
-# mlflow.set_tracking_uri("http://54.169.242.113:5000")
+# Set the tracking URI from environment variable (set in Docker)
+tracking_uri = os.environ.get("MLFLOW_TRACKING_URI", "http://54.254.217.150:5000")
+mlflow.set_tracking_uri(tracking_uri)
+print(f"MLflow tracking URI set to: {tracking_uri}")
 
-# Load the best registered model
+# Initialize MLflow client
+client = MlflowClient()
+
+# Load the latest version of the registered model
+model = None
 try:
-    print("Attempting to load model: models:/BestClassificationModel/1")
-    model = mlflow.sklearn.load_model("models:/BestClassificationModel/1")
+    model_name = "BestClassificationModel"
+    print(f"Attempting to load the latest version of model: {model_name}")
+    
+    # Retrieve the latest version (across all stages)
+    latest_versions = client.get_latest_versions(model_name)
+    
+    if not latest_versions:
+        raise Exception(f"No versions found for model: {model_name}")
+    
+    # Get the latest version (most recent one)
+    latest_version = latest_versions[0]
+    model_uri = f"models:/{model_name}/{latest_version.version}"
+    
+    # Load the model
+    print(f"Loading model: {model_uri}")
+    model = mlflow.sklearn.load_model(model_uri)
     print("Model loaded successfully.")
 except Exception as e:
     print(f"Error loading model: {str(e)}")
     traceback.print_exc()
-    model = None
 
 # Validate input features
 def validate_features(features):

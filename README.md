@@ -7,9 +7,9 @@ This project demonstrates a machine learning workflow for binary classification 
 
 ## Live Deployments
 
-* **MLflow UI (EC2 Instance 2):** [http://54.255.177.73:5000](http://54.255.177.73:5000)
+* **MLflow UI (EC2 Instance 1):** [http://54.254.217.150:5000](http://54.254.217.150:5000)
 
-* **Flask Web Application (EC2 Instance 1):** [http://54.255.177.73:8080](http://54.255.177.73:8080)
+* **Flask Web Application (EC2 Instance 2):** [http://http://13.212.216.186:8001](http://http://13.212.216.186:8001)
 
 ## Project Overview
 
@@ -32,7 +32,7 @@ The GitHub repository likely contains the following:
 * `classifier.py`: Python script for data generation, model training, hyperparameter tuning, evaluation, and MLflow integration.
 * `app.py`: Python script for the Flask web application to load the MLflow model and serve predictions.
 * `templates/`: Directory containing the HTML template (`index.html`) for the Flask web interface.
-* `Dockerfile`: Configuration file for building the Docker image.
+* `Dockerfile`: Configuration file for building the Docker image of the Flask website.
 * `requirements.txt`: List of Python dependencies.
 * `start.sh`: Shell script to start the MLflow server and Flask application within the Docker container.
 * `README.md`: This file, providing an overview of the project and instructions.
@@ -55,8 +55,8 @@ The source code for this project is hosted on GitHub:
 
 The MLflow UI and Flask web application are deployed on separate AWS EC2 instances. You can access them using the following links:
 
-* **MLflow UI:** [http://54.255.177.73:5000](hhttp://54.255.177.73:5000)
-* **Flask Web Application:** [http://54.255.177.73:8080](http://54.255.177.73:8080)
+* **MLflow UI:** [http://54.254.217.150:5000](http://54.254.217.150:5000)
+* **Flask Web Application:** [http://http://13.212.216.186:8001](http://http://13.212.216.186:8001)
 
 ## Getting Started
 
@@ -69,11 +69,11 @@ To run this project locally (assuming you have Docker installed):
     ```
 2.  Build the Docker image:
     ```bash
-    docker build -t mlflow-classifier-flask-app-included:latest .
+    docker build -t mlflow-classifier-flask-app-included .
     ```
 3.  Run the Docker container (this example exposes ports for local testing, but for full functionality with MLflow tracking and artifact storage, you'd need to configure the `MLFLOW_TRACKING_URI` and artifact root):
     ```bash
-    docker run -p 8001:8001 -p 5000:5000 mlflow-classifier-flask-app-included:latest
+    docker run -p 8001:8001 -p 5000:5000 mlflow-classifier-flask-app-included
     ```
 4.  Access the Flask app at `http://localhost:8001` and the MLflow UI at `http://localhost:5000`.
 

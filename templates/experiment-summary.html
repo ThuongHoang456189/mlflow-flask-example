@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification Experiment Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .section-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header:hover {
+            background-color: #0056b3;
+        }
+        .section-content {
+            padding: 15px;
+            background-color: white;
+            display: none;
+        }
+        .section-content.show {
+            display: block;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Classification Experiment Summary</h1>
+
+    <!-- Dataset Information -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            Dataset Information
+            <span class="arrow">▼</span>
+        </div>
+        <div class="section-content">
+            <p><strong>Total samples in X:</strong> 1000</p>
+            <p><strong>Total samples in y:</strong> 1000</p>
+            <p><strong>Number of features:</strong> 20</p>
+            <p><strong>Class distribution in y:</strong></p>
+            <ul>
+                <li>Number of y=0: 500</li>
+                <li>Number of y=1: 500</li>
+            </ul>
+            <p><strong>Example of dataset (first 3 rows):</strong></p>
+            <pre>
+ feature_0  feature_1  feature_2  feature_3  feature_4  feature_5  feature_6  feature_7  feature_8  feature_9  feature_10  feature_11  feature_12  feature_13  feature_14  feature_15  feature_16  feature_17  feature_18  feature_19
+ -0.669356  -1.495778  -0.870766   1.141831   0.021606   1.730630  -1.251698   0.289305   0.357163  -0.196811    0.829274    0.154850   -0.219970   -0.739137    1.802012    1.634606   -0.938180   -1.267337   -1.276334    1.016643
+  0.093372   0.785848   0.105754   1.272354  -0.846316  -0.979093   1.263707   0.264020   2.411677  -0.960046    0.543479    0.199810    0.288724    0.732492   -0.872002   -1.654887   -1.130204   -0.122709    0.693431    0.911363
+  1.146441   0.515579  -1.222895  -0.396230  -1.293508  -0.352428   0.071254   1.239584   1.007133  -1.479444   -0.695695   -0.918127    0.604121    1.068379   -0.882271    2.303639   -0.973379    1.259233    0.360015    1.920368
+            </pre>
+            <p><strong>Example of target (first 3 values):</strong></p>
+            <pre>[1 0 1]</pre>
+        </div>
+    </div>
+
+    <!-- Model Summary -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            Model Summary
+            <span class="arrow">▼</span>
+        </div>
+        <div class="section-content">
+            <p>The model used is a <strong>Logistic Regression</strong> classifier, designed for binary classification tasks.</p>
+            <ul>
+                <li><strong>Number of Features:</strong> 20</li>
+                <li><strong>Dataset Size:</strong> 1000 samples, split into 80% training (800 samples) and 20% testing (200 samples)</li>
+                <li><strong>Class Distribution:</strong> Balanced, with 500 samples per class (y=0 and y=1)</li>
+                <li><strong>Evaluation Metrics:</strong> Accuracy and F1-score</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Experiment Summary -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            Experiment Summary
+            <span class="arrow">▼</span>
+        </div>
+        <div class="section-content">
+            <p>The experiment, named "classification_experiment", was conducted using MLflow to track and compare multiple runs of a Logistic Regression model. The goal was to find the best model by tuning various hyperparameters and evaluating performance on a test set.</p>
+            <p><strong>Hyperparameter Tuning:</strong></p>
+            <ul>
+                <li><strong>C (Inverse of Regularization Strength):</strong> Values: [0.1, 1.0, 10.0]
+                    <ul>
+                        <li>Controls the trade-off between fitting the training data and keeping the model simple (regularization).</li>
+                        <li>Smaller C values increase regularization, reducing overfitting but potentially underfitting.</li>
+                        <li>Larger C values reduce regularization, allowing the model to fit the training data more closely, which may lead to overfitting.</li>
+                    </ul>
+                </li>
+                <li><strong>solver:</strong> Values: ['lbfgs', 'liblinear']
+                    <ul>
+                        <li>Determines the optimization algorithm used to find the model parameters.</li>
+                        <li>'lbfgs' is a quasi-Newton method, efficient for small-to-medium datasets.</li>
+                        <li>'liblinear' uses coordinate descent, suitable for small datasets.</li>
+                        <li>Affects convergence speed and compatibility with other parameters like tol.</li>
+                    </ul>
+                </li>
+                <li><strong>tol (Tolerance):</strong> Values: [1e-4, 1e-3]
+                    <ul>
+                        <li>Stopping criterion for the solver; smaller values require stricter convergence.</li>
+                        <li>Smaller tol values lead to more precise solutions but may increase computation time.</li>
+                        <li>Larger tol values stop earlier, saving time but potentially reducing accuracy.</li>
+                        <li>Interacts with solver: Some solvers (e.g., 'lbfgs') may be more sensitive to tol changes.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p><strong>Total Runs:</strong> 3 (C) × 2 (solver) × 2 (tol) = 12 runs</p>
+            <p><strong>Evaluation Metrics:</strong></p>
+            <ul>
+                <li>Accuracy: Measures the proportion of correct predictions.</li>
+                <li>F1-score: Harmonic mean of precision and recall, useful for balanced evaluation.</li>
+            </ul>
+            <p><strong>Model Selection:</strong> The best model was selected based on the highest F1-score and registered in MLflow as "BestClassificationModel".</p>
+            <p><strong>Tracking:</strong> All runs were logged in MLflow under the experiment name "classification_experiment", including parameters, metrics, and models.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            content.classList.toggle('show');
+            arrow.textContent = content.classList.contains('show') ? '▲' : '▼';
+        }
+
+        // Open the first section by default
+        document.querySelector('.section-header').click();
+    </script>
+</body>
+</html>

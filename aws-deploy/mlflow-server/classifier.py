@@ -1,5 +1,6 @@
 import mlflow
 import mlflow.sklearn
+import os
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -8,8 +9,8 @@ import pandas as pd
 import numpy as np
 from itertools import product
 
-# Set the tracking URI explicitly
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
+# Set the tracking URI from environment variable
+mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "http://localhost:5000"))
 
 # Generate synthetic classification data
 X, y = make_classification(n_samples=1000, n_features=20, n_classes=2, random_state=42)
@@ -27,17 +28,15 @@ print(f" - Number of y=1: {np.sum(y == 1)}")
 # Convert X to a DataFrame for better visualization
 X_df = pd.DataFrame(X, columns=[f"feature_{i}" for i in range(X.shape[1])])
 print("\nExample of dataset (first 5 rows):")
-# Explicitly ensure 5 rows are displayed using head(5)
 print(X_df.head(5).to_string(index=False))
 print("\nExample of target (first 5 values):")
-# Ensure 5 values of the target are displayed
 print(y[:5])
 
 # Define expanded hyperparameter grid
 param_grid = {
     'C': [0.1, 1.0, 10.0],
-    'solver': ['lbfgs', 'liblinear'],  # 'lbfgs' supports l2 or None, 'liblinear' supports l1 or l2
-    'tol': [1e-4, 1e-3],  # Vary tolerance
+    'solver': ['lbfgs', 'liblinear'],
+    'tol': [1e-4, 1e-3],
 }
 
 # Initialize MLflow
@@ -84,7 +83,7 @@ for params in product(
             mlflow.log_metric("accuracy", accuracy)
             mlflow.log_metric("f1_score", f1)
             
-            # Log model
+            # Log model to S3
             mlflow.sklearn.log_model(model, "model")
             
             # Track best model
