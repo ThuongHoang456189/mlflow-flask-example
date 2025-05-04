@@ -9,7 +9,7 @@ This project demonstrates a machine learning workflow for binary classification 
 
 * **MLflow UI (EC2 Instance 1):** [http://54.254.217.150:5000](http://54.254.217.150:5000)
 
-* **Flask Web Application (EC2 Instance 2):** [http://http://13.212.216.186:8001](http://http://13.212.216.186:8001)
+* **Flask Web Application (EC2 Instance 2):** [http://13.212.216.186:8001](http://13.212.216.186:8001)
 
 ## Project Overview
 
@@ -56,7 +56,7 @@ The source code for this project is hosted on GitHub:
 The MLflow UI and Flask web application are deployed on separate AWS EC2 instances. You can access them using the following links:
 
 * **MLflow UI:** [http://54.254.217.150:5000](http://54.254.217.150:5000)
-* **Flask Web Application:** [http://http://13.212.216.186:8001](http://http://13.212.216.186:8001)
+* **Flask Web Application:** [http://13.212.216.186:8001](http://13.212.216.186:8001)
 
 ## Getting Started
 
